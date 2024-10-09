@@ -17,8 +17,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
+#from drf_yasg import openapi
+#from drf_yasg.utils import swagger_auto_schema
 from datetime import datetime
 
 # Others
@@ -26,5 +26,21 @@ import json
 import random
 
 # Custom Imports
-from API import serializer as api_serializer
+from API import serializers as api_serializer
 from API import models as api_models
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class=api_serializer.MyTokenObtainPairSerializer
+
+class RegisterView(generics.CreateAPIView):
+    queryset=api_models.User.objects.all()
+    permission_classes=[AllowAny]
+    serializer_class=api_serializer.RegisterSerializer
+class ProfileView(generics.RetrieveUpdateAPIView):
+    permission_classes=[AllowAny]
+    serializer_class=api_serializer.ProfileSerializer
+    def get_object(self):
+        user_id=self.kwargs["user_id"]
+        user=api_models.User.objects.get(id=user_id)
+        profile=api_models.Profile.objects.get(user=user)
+        return profile
