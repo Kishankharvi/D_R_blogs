@@ -60,4 +60,49 @@ class PostCategoryListAPIView(generics.ListAPIView):
     permission_classes=[AllowAny]
 
     def get_queryset(self):
-        category=self.kwargs["category_slug"]
+        category_slug=self.kwargs["category_slug"]
+        category=api_models.Category.objects.get(slug=category_slug)
+        return api_models.Post.objects.filter(category=category,status="Active")
+    
+class PostListAPIView(generics.ListAPIView):
+     serializer_class=api_serializer.PostSerializer
+     permission_classes=[AllowAny]
+
+
+     def get_queryset(self):
+          return api_models.Post.objects.filter(status="Live")
+
+class PostDetailAPIView(generics.RetrieveAPIView):
+    serializer_class=api_serializer.PostSerializer
+    permission_classes=[AllowAny]
+
+
+    def get_object(self):
+        slug=self.kwargs["slug"]
+        post=api_models.Post.objects.get(slug=slug,status="Active")
+        post.view+=1
+        post.save()
+        return post
+    
+
+class LikePostAPIView(APIView):
+     def post(self,request):
+          user_id=request.data["user_id"]
+          post_id=request.data["post_id"]
+
+          user=api_models.User.objects.get(id=user_id)
+
+          post=api_models.Post.objects.get(id=post_id)
+
+          if user in post.likes.all():
+               post.likes.remove(user)
+               return Response({"messgae :Post disliked"},status-status.HTTP_200_OK)
+
+          else:
+               post.likes.all(user)
+               api_models.Notification.objects.create(
+                    user=post.user,
+                    post=post,
+                    type="Like"
+               )
+               return Response({"messgae :Post liked"},status-status.HTTP_201_CREATED)

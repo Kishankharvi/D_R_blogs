@@ -39,17 +39,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+      'drf_yasg',
     'API',
-
-    'corsheaders',
+       # For drf-spectacular
+    'corsheaders', 
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'drf_yasg',
+  
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+
+  'corsheaders.middleware.CorsMiddleware',  # This should be near the top
+    'django.middleware.common.CommonMiddleware',
+
+
+
+
+  
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -135,6 +143,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL='media/'
 MEDIA_ROOT=BASE_DIR/'media'
 REST_FRAMEWORK = {
+      'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
