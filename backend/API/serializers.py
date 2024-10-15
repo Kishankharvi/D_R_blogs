@@ -58,7 +58,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
-        Model=API_models.Comment
+        model=API_models.Comment
         fields="__all__"
     def __init__(self, *args, **kwargs):
         super(CommentSerializer, self).__init__(*args, **kwargs
@@ -71,7 +71,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
-        Model=API_models.Post
+        model=API_models.Post
         fields="__all__"
     def __init__(self, *args, **kwargs):
         super(PostSerializer, self).__init__(*args, **kwargs
@@ -84,7 +84,7 @@ class PostSerializer(serializers.ModelSerializer):
                 
 class BookmarkSerializer(serializers.ModelSerializer):
     class Meta:
-        Model=API_models.BookMark
+        model=API_models.BookMark
         fields="__all__"
     def __init__(self, *args, **kwargs):
         super(BookmarkSerializer, self).__init__(*args, **kwargs
@@ -99,7 +99,7 @@ class BookmarkSerializer(serializers.ModelSerializer):
 
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
-        Model=API_models.Notification
+        model=API_models.Notification
         fields="__all__"
     def __init__(self, *args, **kwargs):
         super(NotificationSerializer, self).__init__(*args, **kwargs
@@ -110,7 +110,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         else:
                 self.Meta.depth=1
                 
-class AutoSerializer(serializers.Serializer):
+class AuthorSerializer(serializers.Serializer):
     views=serializers.IntegerField(default=0)
     posts=serializers.IntegerField(default=0)
 
