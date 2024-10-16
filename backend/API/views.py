@@ -222,3 +222,52 @@ class DashBoardStats(generics.ListAPIView):
             queryset=self.get_queryset()
             serializer=self.get_serializer(queryset,many=True)
             return Response(serializer.data)
+
+
+
+
+class DashBoardPostLists(generics.ListAPIView):
+    serializer_class=api_serializer.PostSerializer
+    permission_classes=[AllowAny]
+
+    def get_queryset(self):
+        user_id=self.kwargs["user_id"]
+
+        user=api_models.User.objects.get(id=user_id)
+        return api_models.Post.objects.filter(user=user).order_by("-id")
+
+class DashBoardCommentLists(generics.ListAPIView):
+    serializer_class=api_serializer.CommentSerializer
+    permission_classes=[AllowAny]
+
+
+    def get_queryset(self):
+        user_id=self.kwargs["user_id"]
+        user=api_models.User.objects.get(id=user_id)
+        return api_models.Comment.objects.filter(post__user=user)
+
+class DashBoardNotificationLists(generics.ListAPIView):
+    serializer_class=api_serializer.NotificationSerializer
+    permission_classes=[AllowAny]
+
+    def get_queryset(self):
+        user_id=self.kwargs["user_id"]
+        user=api_models.User.objects.get(id=user_id)
+        return api_models.Notification.objects.filter(seen=False,user=user)
+
+class DashBoardMarkNotificationSeen(APIView):
+     def post(self,request):
+          noti_id=request.data["noti_id"]
+          noti=api_models.Notification.objects.get(id=noti_id)
+          noti.seen=True
+          noti.save()
+          return Response({"message": "Notif marked ass seen"},status=status.HTTP_200_OK)
+     
+class DashBoardReplyCommentAPIView(APIView):
+    def post(self, request):
+              comment_id=request.data["comment_id"]
+              reply=request.data["reply"]
+              comment=api_models.Comment.objects.get(id=comment_id)
+              comment.reply=reply
+              comment.save()
+              return Response({"message":"Comment response sent"},status=status.HTTP_201_CREATED)
