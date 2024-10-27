@@ -70,7 +70,7 @@ class PostListAPIView(generics.ListAPIView):
 
 
      def get_queryset(self):
-          return api_models.Post.objects.filter(status="Live")
+          return api_models.Post.objects.filter(status="Active")
 
 class PostDetailAPIView(generics.RetrieveAPIView):
     serializer_class=api_serializer.PostSerializer

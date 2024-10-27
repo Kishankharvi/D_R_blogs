@@ -50,14 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-
-  'corsheaders.middleware.CorsMiddleware',  # This should be near the top
-    'django.middleware.common.CommonMiddleware',
-
-
-
-
-  
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,7 +58,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
@@ -181,9 +173,7 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
-
 CORS_ALLOW_ALL_ORIGINS = True
-
 AUTH_USER_MODEL='API.User'
 # Custom Admin Settings
 JAZZMIN_SETTINGS = {
