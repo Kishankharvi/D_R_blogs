@@ -105,18 +105,127 @@ class LikePostAPIView(APIView):
 
           if user in post.likes.all():
                post.likes.remove(user)
-               return Response({"message ":"Post disliked"},status=status.HTTP_200_OK)
+               return Response({"message":"Post disliked"},status=status.HTTP_200_OK)
 
           else:
                post.likes.add(user)
-               api_models.Notification.objects.create(
-                    user=post.user,
-                    post=post,
-                    type="Like"
-               )
-               return Response({"message" :"Post liked"},status-status.HTTP_201_CREATED)
+            #    api_models.Notification.objects.create(
+            #         user=post.user,
+            #         post=post,
+            #         type="Like"
+            #    )
+               return Response({"message" :"Post liked"},status=status.HTTP_201_CREATED)
+# import logging
+# from rest_framework.response import Response
+# from rest_framework import status
+# from rest_framework.views import APIView
+# from drf_yasg import openapi
+# from drf_yasg.utils import swagger_auto_schema
+# from . import api_models
+
+# logger = logging.getLogger(__name__)
+
+# class PostCommentAPIView(APIView):
+#     @swagger_auto_schema(
+#         request_body=openapi.Schema(
+#             type=openapi.TYPE_OBJECT,
+#             required=['post_id', 'name', 'email', 'comment'],
+#             properties={
+#                 'post_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+#                 'name': openapi.Schema(type=openapi.TYPE_STRING),
+#                 'email': openapi.Schema(type=openapi.TYPE_STRING, format='email'),
+#                 'comment': openapi.Schema(type=openapi.TYPE_STRING),
+#             },
+#         ),
+#     )
+#     def post(self, request):
+#         try:
+#             post_id = request.data["post_id"]
+#             name = request.data["name"]
+#             email = request.data["email"]
+#             comment = request.data["comment"]
+
+#             # Logging for debugging purposes
+#             logger.info(f"Attempting to retrieve post with id {post_id}")
+#             post = api_models.Post.objects.get(id=post_id)
+            
+#             logger.info("Creating a new comment")
+#             api_models.Comment.objects.create(
+#                 post=post,
+#                 name=name,
+#                 email=email,
+#                 comment=comment,
+#             )
+
+#             logger.info("Creating a notification")
+#             api_models.Notification.objects.create(
+#                 user=post.user,
+#                 post=post,
+#                 type="Comment"
+#             )
+#             return Response({"message": "Comment sent"}, status=status.HTTP_201_CREATED)
+        
+#         except api_models.Post.DoesNotExist:
+#             logger.error(f"Post with id {post_id} does not exist")
+#             return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
+#         except KeyError as e:
+#             logger.error(f"Missing field in request: {str(e)}")
+#             return Response({"error": f"Missing field: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+#         except Exception as e:
+#             logger.exception("An unexpected error occurred")
+#             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+
+
+
+# from rest_framework.response import Response
+# from rest_framework import status
+# from rest_framework.views import APIView
+# from drf_yasg import openapi
+# from drf_yasg.utils import swagger_auto_schema
+# from . import api_models  # Update this import based on your project structure
+
+# class PostCommentAPIView(APIView):
+#     @swagger_auto_schema(
+#         request_body=openapi.Schema(
+#             type=openapi.TYPE_OBJECT,
+#             required=['post_id', 'name', 'email', 'comment'],
+#             properties={
+#                 'post_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+#                 'name': openapi.Schema(type=openapi.TYPE_STRING),
+#                 'email': openapi.Schema(type=openapi.TYPE_STRING, format='email'),
+#                 'comment': openapi.Schema(type=openapi.TYPE_STRING),
+#             },
+#         ),
+#     )
+#     def post(self, request):
+#         try:
+#             post_id = request.data["post_id"]
+#             name = request.data["name"]
+#             email = request.data["email"]
+#             comment = request.data["comment"]
+
+#             post = api_models.Post.objects.get(id=post_id)
+#             api_models.Comment.objects.create(
+#                 post=post,
+#                 name=name,
+#                 email=email,
+#                 comment=comment,
+#             )
+#             api_models.Notification.objects.create(
+#                 user=post.user,
+#                 post=post,
+#                 type="Comment"
+#             )
+#             return Response({"message": "Comment sent"}, status=status.HTTP_201_CREATED)
+        
+#         except api_models.Post.DoesNotExist:
+#             return Response({"error": "Post not found"}, status=status.HTTP_404_NOT_FOUND)
+#         except KeyError as e:
+#             return Response({"error": f"Missing field: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+#         except Exception as e:
+#             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
@@ -128,31 +237,33 @@ class PostCommentAPIView(APIView):
             properties={
             
                 'post_id': openapi.Schema(type=openapi.TYPE_INTEGER),
-                  'name': openapi.Schema(type=openapi.TYPE_STRING),
-                    'email': openapi.Schema(type=openapi.TYPE_STRING),
-                      'comment': openapi.Schema(type=openapi.TYPE_STRING),
+                'name': openapi.Schema(type=openapi.TYPE_STRING),
+                'email': openapi.Schema(type=openapi.TYPE_STRING),
+                'comment': openapi.Schema(type=openapi.TYPE_STRING),
             },
         ),
     )
      def post(self,request):
-          user_id=request.data["user_id"]
+      
           post_id=request.data["post_id"]
-          comment=request.data["comment"]
+          name=request.data["name"]
           email=request.data["email"]
+          comment=request.data["comment"]
+         
 
           post=api_models.Post.objects.get(id=post_id)
           api_models.Comment.objects.create(
           post=post,
-          name=email,
+          name=name,
           email=email,
           comment=comment,
           )
-          api_models.Notification.objects.create(
-                    user=post.user,
-                    post=post,
-                    type="Comment"
-               )
-          return Response({"message ":"Comment sent"},status-status.HTTP_201_CREATED)
+        #   api_models.Notification.objects.create(
+        #             user=post.user,
+        #             post=post,
+        #             type="Comment"
+        #        )
+          return Response({"message ":"Comment sent"},status=status.HTTP_201_CREATED)
 
 
      
@@ -182,12 +293,12 @@ class BookmarkPostAPIView(APIView):
         else:
             api_models.BookMark.objects.create(post=post, user=user)
 
-            api_models.Notification.objects.create(
-                    user=post.user,
-                    post=post,
-                    type="BookMark"
-               )
-            return Response({"message ":"Post added to bookmarks"},status=status.HTTP_201_CREATED)
+            # api_models.Notification.objects.create(
+            #         user=post.user,
+            #         post=post,
+            #         type="BookMark"
+            #    )
+            return Response({"message":"Post added to bookmarks"},status=status.HTTP_201_CREATED)
         
 
 
