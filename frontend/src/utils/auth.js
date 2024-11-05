@@ -118,7 +118,7 @@ export const setAuthUser = (access_token, refresh_token) => {
   Cookies.set("refresh_token", refresh_token, { expires: 7, secure: true });
 
   // Decoding access token to get user information
-  const user = jwt_decode(access_token) ?? null;
+  const user = jwtDecode(access_token) ?? null;
 
   // Update user state with decoded user information
   if (user) {
